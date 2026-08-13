@@ -2,6 +2,11 @@
     Welcome to the Customer Dashboard
 </h1>
 
+<!-- Home -->
+<x-responsive-nav-link :href="url('/')" :active="request()->routeIs('home')">
+    {{ __('Home') }}
+</x-responsive-nav-link>
+
 <!-- Authentication -->
 <form method="POST" action="{{ route('logout') }}">
     @csrf
