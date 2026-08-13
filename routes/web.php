@@ -43,3 +43,4 @@ Route::middleware(['auth:web', 'verified', 'check_role:vendor'])
 */
 require __DIR__ . '/auth.php';
 require __DIR__ . '/admin.php';
+require __DIR__ . '/google.php';
