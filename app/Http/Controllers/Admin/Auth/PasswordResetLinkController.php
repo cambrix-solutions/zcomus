@@ -3,29 +3,20 @@
 namespace App\Http\Controllers\Admin\Auth;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\ValidationException;
-use Illuminate\View\View;
-use Illuminate\Auth\Notifications\ResetPassword;
 
 class PasswordResetLinkController extends Controller
 {
-    /**
-     * Display the password reset link request view.
-     */
-    public function create(): View
-    {
-        return view('admin.auth.forgot-password');
-    }
-
     /**
      * Handle an incoming password reset link request.
      *
      * @throws ValidationException
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request): JsonResponse
     {
         $request->validate([
             'email' => ['required', 'email'],
@@ -37,17 +28,24 @@ class PasswordResetLinkController extends Controller
         $status = Password::broker('admins')->sendResetLink(
             $request->only('email'),
             function ($user, $token) {
-                $notifications = new ResetPassword($token);
-                $notifications->createUrlUsing(function () use ($user, $token) {
-                    return route('admin.password.reset', ['token' => $token, 'email' => $user->email]);
+                $notification = new ResetPassword($token);
+                $notification->createUrlUsing(function () use ($user, $token) {
+                    return config('app.frontend_url')
+                        . '/admin/reset-password?token=' . $token
+                        . '&email=' . urlencode($user->email);
                 });
-                $user->notify($notifications);
+                $user->notify($notification);
             }
         );
 
-        return $status == Password::RESET_LINK_SENT
-            ? back()->with('status', __($status))
-            : back()->withInput($request->only('email'))
-                ->withErrors(['email' => __($status)]);
+        if ($status != Password::RESET_LINK_SENT) {
+            throw ValidationException::withMessages([
+                'email' => [__($status)],
+            ]);
+        }
+
+        return response()->json([
+            'message' => __($status),
+        ]);
     }
 }

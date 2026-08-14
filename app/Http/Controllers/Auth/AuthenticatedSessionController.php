@@ -1,37 +1,29 @@
 <?php
+
 namespace App\Http\Controllers\Auth;
-use Illuminate\Http\JsonResponse;
+
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\View\View;
+
 class AuthenticatedSessionController extends Controller
 {
     /**
-     * Display the login view.
-     */
-    public function create(): View
-    {
-        return view('auth.login');
-    }
-    /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): RedirectResponse
+    public function store(LoginRequest $request): JsonResponse
     {
         $request->authenticate();
         $request->session()->regenerate();
-        if ($request->user()->role == 'customer') {
-            return redirect()->intended(route('customer.dashboard', absolute: false));
-        } elseif ($request->user()->role == 'vendor') {
-            return redirect()->intended(route('vendor.dashboard', absolute: false));
-        } elseif ($request->user()->role == 'support') {
-            return redirect()->intended(route('support.dashboard', absolute: false));
-        }
-        abort(404);
+
+        return response()->json([
+            'message' => 'Logged in successfully.',
+            'user' => $request->user(),
+        ]);
     }
+
     /**
      * Destroy an authenticated session.
      */
