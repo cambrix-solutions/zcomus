@@ -1,11 +1,14 @@
 <?php
+
 namespace App\Http\Controllers\Frontend\Auth;
+
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
+
 class GoogleController extends Controller
 {
     /**
@@ -14,17 +17,22 @@ class GoogleController extends Controller
     public function redirect(): RedirectResponse
     {
         $driver = Socialite::driver('google')->stateless();
+
         if (app()->environment('local')) {
             $driver->with(['prompt' => 'select_account']);
         }
+
         return $driver->redirect();
     }
+
     public function callback(): RedirectResponse
     {
         $googleUser = Socialite::driver('google')->stateless()->user();
+
         $user = User::where('google_id', $googleUser->getId())
             ->orWhere('email', $googleUser->getEmail())
             ->first();
+
         if ($user) {
             // Existing user — link google_id if they originally signed up manually
             if (!$user->google_id) {
@@ -41,7 +49,9 @@ class GoogleController extends Controller
                 'email_verified_at' => now(), // Google already verified the email
             ]);
         }
+
         Auth::guard('web')->login($user, remember: true);
-        return redirect()->route('customer.dashboard');
+
+        return redirect(config('app.frontend_url') . '/customer/dashboard');
     }
 }

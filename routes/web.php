@@ -1,7 +1,9 @@
 <?php
+
 use App\Http\Controllers\Frontend\CustomerDashboardController;
 use App\Http\Controllers\Frontend\VendorDashboardController;
 use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Public Routes
@@ -9,8 +11,11 @@ use Illuminate\Support\Facades\Route;
 | Routes accessible to everyone, no authentication required.
 */
 Route::get('/', function () {
-    return view('welcome');
+    return response()->json([
+        'message' => 'Welcome to Zcomus API',
+    ]);
 })->name('home');
+
 /*
 |--------------------------------------------------------------------------
 | Customer Routes
@@ -23,6 +28,7 @@ Route::middleware(['auth:web', 'verified', 'check_role:customer'])
     ->group(function () {
         Route::get('/dashboard', [CustomerDashboardController::class, 'index'])->name('dashboard');
     });
+
 /*
 |--------------------------------------------------------------------------
 | Vendor Routes
@@ -35,6 +41,7 @@ Route::middleware(['auth:web', 'verified', 'check_role:vendor'])
     ->group(function () {
         Route::get('/dashboard', [VendorDashboardController::class, 'index'])->name('dashboard');
     });
+
 /*
 |--------------------------------------------------------------------------
 | Additional Route Files

@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Controllers\Auth;
+use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\RedirectResponse;
@@ -34,13 +35,16 @@ class AuthenticatedSessionController extends Controller
     /**
      * Destroy an authenticated session.
      */
-    public function destroy(Request $request): RedirectResponse
+    public function destroy(Request $request): JsonResponse
     {
         Auth::guard('web')->logout();
+
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        // Prevent caching of the previous page to avoid back button issues after logout
-        return redirect('/')
+
+        return response()->json([
+            'message' => 'Logged out successfully.',
+        ])
             ->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
             ->header('Pragma', 'no-cache')
             ->header('Expires', '0');
