@@ -1,4 +1,5 @@
 <?php
+
 use App\Http\Middleware\CheckRoleMiddleware;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use Illuminate\Auth\Middleware\Authenticate;
@@ -6,6 +7,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
+
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__ . '/../routes/web.php',
@@ -18,9 +20,20 @@ return Application::configure(basePath: dirname(__DIR__))
             'guest' => RedirectIfAuthenticated::class,
             'check_role' => CheckRoleMiddleware::class,
         ]);
+
+        // $middleware->preventRequestForgery(except: [
+        //     'register',
+        //     'login',
+        //     'logout',
+        //     'forgot-password',
+        //     'reset-password',
+        //     'email/verification-notification',
+        //     'confirm-password',
+        // ]);
+        $middleware->preventRequestForgery(except: [
+            '*',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        $exceptions->shouldRenderJsonWhen(
-            fn(Request $request) => $request->is('api/*'),
-        );
+        $exceptions->shouldRenderJsonWhen(fn() => true);
     })->create();

@@ -8,7 +8,7 @@ use Illuminate\Contracts\View\View;
 
 class CustomerDashboardController extends Controller
 {
-     public function index() : View
+    public function index(): View
     {
         return view('customer.dashboard');
     }
