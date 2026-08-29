@@ -67,3 +67,4 @@ require __DIR__ . '/auth.php';
 require __DIR__ . '/admin.php';
 require __DIR__ . '/google.php';
 require __DIR__ . '/account.php';
+require __DIR__ . '/catalog.php';
