@@ -54,9 +54,6 @@ Route::middleware(['auth:web', 'verified', 'check_role:support'])
     ->group(function () {
         Route::get('/dashboard', [SupportDashboardController::class, 'index'])->name('dashboard');
     });
-
-
-
 /*
 |--------------------------------------------------------------------------
 | Additional Route Files
@@ -68,3 +65,4 @@ require __DIR__ . '/admin.php';
 require __DIR__ . '/google.php';
 require __DIR__ . '/account.php';
 require __DIR__ . '/catalog.php';
+require __DIR__ . '/admin_users.php';

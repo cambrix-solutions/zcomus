@@ -10,6 +10,13 @@ use Illuminate\Support\Str;
 
 class ShopSeeder extends Seeder
 {
+    /**
+     * Every seeded vendor owner also ends up with the `customer` role
+     * (automatic on creation, see User::booted()) alongside the
+     * `vendor` role granted explicitly below. That's intentional, not
+     * a leftover — a vendor owner can still shop as a customer on
+     * their own storefront or elsewhere.
+     */
     public function run(): void
     {
         $shops = [
@@ -26,10 +33,11 @@ class ShopSeeder extends Seeder
                 [
                     'name' => $data['name'] . ' Owner',
                     'password' => Hash::make('password'),
-                    'role' => 'vendor',
                     'email_verified_at' => now(),
                 ]
             );
+
+            $vendor->assignRole('vendor');
 
             Shop::updateOrCreate(
                 ['slug' => $slug],
