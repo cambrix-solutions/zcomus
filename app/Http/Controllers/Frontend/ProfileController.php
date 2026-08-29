@@ -24,7 +24,7 @@ class ProfileController extends Controller
      */
     public function show(Request $request): JsonResponse
     {
-        return $this->respond(new UserResource($request->user()->loadMissing('shop')));
+        return $this->respond(new UserResource($request->user()->loadMissing(['shop', 'roles'])));
     }
 
     /**
@@ -35,7 +35,7 @@ class ProfileController extends Controller
         $user = $request->user();
         $user->update($request->validated());
 
-        return $this->respond(new UserResource($user->fresh()->loadMissing('shop')));
+        return $this->respond(new UserResource($user->fresh()->loadMissing(['shop', 'roles'])));
     }
 
     /**

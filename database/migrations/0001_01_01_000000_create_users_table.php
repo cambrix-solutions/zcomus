@@ -8,10 +8,11 @@ return new class extends Migration {
     /**
      * Run the migrations.
      *
-     * Spec ref: ZCOMUS_CUSTOMER_API_SPEC §19.1 (users — extend for SPA).
-     * Folded straight into the base table since the project hasn't
-     * shipped yet (migrate:fresh --seed workflow) — no need for a
-     * separate alter-table migration.
+     * Spec ref: ZCOMUS_CUSTOMER_API_SPEC §19.1 (users), updated per team
+     * decision: role is no longer a single enum column here — see
+     * 2026_08_29_000001_create_roles_table.php and
+     * 2026_08_29_000002_create_role_user_table.php. A user can now hold
+     * zero or more roles (customer/vendor/support) via that pivot.
      */
     public function up(): void
     {
@@ -23,7 +24,6 @@ return new class extends Migration {
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable(); // nullable since Google users won't have one
             $table->string('phone')->nullable();
-            $table->enum('role', ['customer', 'vendor', 'support'])->default('customer');
 
             // Payment methods per spec §6.
             $table->enum('preferred_payment', ['cod', 'aba', 'wing', 'khqr'])->nullable();

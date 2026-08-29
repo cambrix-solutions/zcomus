@@ -1,20 +1,26 @@
 <?php
+
 namespace App\Http\Middleware;
+
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+
 class CheckRoleMiddleware
 {
     /**
-     * Handle an incoming request.
-     *
-     * @param  Closure(Request): (Response)  $next
+     * Usage unchanged in routes: ->middleware('check_role:vendor').
+     * Now also accepts multiple roles: ->middleware('check_role:vendor,support')
+     * grants access if the user holds ANY of the listed roles.
      */
-    public function handle(Request $request, Closure $next, string $role): Response
+    public function handle(Request $request, Closure $next, string ...$roles): Response
     {
-        if ($request->user()->role === $role) {
-            return $next($request);
+        $user = $request->user();
+
+        if (! $user || ! $user->hasAnyRole($roles)) {
+            abort(403, 'You do not have permission to access this resource.');
         }
-        return redirect('/');
+
+        return $next($request);
     }
 }
