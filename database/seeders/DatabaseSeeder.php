@@ -9,13 +9,12 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            // Step 0 — admin
             AdminSeeder::class,
-
             // Step 1 — foundation
             CategorySeeder::class,
             ShopSeeder::class,
             ProductSeeder::class,
+            ProductVariantSeeder::class, // Step 6 — gives some products real variants
 
             // Step 2 — cart & addresses
             CustomerSeeder::class,
