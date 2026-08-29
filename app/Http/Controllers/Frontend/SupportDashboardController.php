@@ -6,12 +6,12 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
-class CustomerDashboardController extends Controller
+class SupportDashboardController extends Controller
 {
     public function index(): JsonResponse
     {
         return response()->json([
-            'message' => 'Welcome to the Customer Dashboard',
+            'message' => 'Welcome to the Support Dashboard',
         ]);
     }
 }
