@@ -1,10 +1,8 @@
 <?php
-
 use App\Http\Controllers\Frontend\CustomerDashboardController;
 use App\Http\Controllers\Frontend\SupportDashboardController;
 use App\Http\Controllers\Frontend\VendorDashboardController;
 use Illuminate\Support\Facades\Route;
-
 /*
 |--------------------------------------------------------------------------
 | Public Routes
@@ -16,7 +14,6 @@ Route::get('/', function () {
         'message' => 'Home Page - Public Access',
     ]);
 })->name('home');
-
 /*
 |--------------------------------------------------------------------------
 | Customer Routes
@@ -29,7 +26,6 @@ Route::middleware(['auth:web', 'verified', 'check_role:customer'])
     ->group(function () {
         Route::get('/dashboard', [CustomerDashboardController::class, 'index'])->name('dashboard');
     });
-
 /*
 |--------------------------------------------------------------------------
 | Vendor Routes
@@ -66,3 +62,4 @@ require __DIR__ . '/google.php';
 require __DIR__ . '/account.php';
 require __DIR__ . '/catalog.php';
 require __DIR__ . '/admin_users.php';
+require __DIR__ . '/cart.php';
