@@ -3,9 +3,6 @@ use App\Http\Controllers\Frontend\CustomerDashboardController;
 use App\Http\Controllers\Frontend\SupportDashboardController;
 use App\Http\Controllers\Frontend\VendorDashboardController;
 use Illuminate\Support\Facades\Route;
-Route::get('/aba-test', function () {
-    return view('aba-test');
-});
 /*
 |--------------------------------------------------------------------------
 | Public Routes
@@ -55,6 +52,15 @@ Route::middleware(['auth:web', 'verified', 'check_role:support'])
     });
 /*
 |--------------------------------------------------------------------------
+| Aba Payway Test Route
+|--------------------------------------------------------------------------
+| Routes for authenticated users with the "customer + vendor" role.
+*/
+Route::get('/aba-test', function () {
+    return view('aba-test');
+});
+/*
+|--------------------------------------------------------------------------
 | Additional Route Files
 |--------------------------------------------------------------------------
 | Breeze/Jetstream auth routes + admin-specific route file.
@@ -68,3 +74,5 @@ require __DIR__ . '/admin_users.php';
 require __DIR__ . '/cart.php';
 require __DIR__ . '/checkout.php';
 require __DIR__ . '/orders.php';
+require __DIR__ . '/account-extras.php';
+require __DIR__ . '/recently-viewed.php';
