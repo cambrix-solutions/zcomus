@@ -7,13 +7,12 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Spec ref: §19.10 `payments`
-     *
-     * ASSUMPTION: `provider` and `status` enums had no value list at all
-     * in the source doc (not even a truncated one). `provider` mirrors
-     * the payment_method codes from §6; `cod` is included so a delivery
-     * collection can still be logged as a payment row for reconciliation,
-     * even though it never hits POST /api/payments/initiate.
+     * Spec ref: §19.10 `payments`, updated for §20.9's
+     * POST /api/payments/initiate response, which needs `pay_url`
+     * (ABA/Wing — link-based) and `qr_payload` (KHQR — scan-based).
+     * Neither was in the original §19.12 table; added here since
+     * you're still pre-launch (folded into the base migration rather
+     * than a separate alter-table one, same pattern as earlier steps).
      */
     public function up(): void
     {
@@ -24,6 +23,9 @@ return new class extends Migration
             $table->decimal('amount', 10, 2);
             $table->enum('status', ['pending', 'completed', 'failed', 'refunded'])->default('pending');
             $table->string('provider_ref')->nullable(); // provider's transaction/reference id
+            $table->string('pay_url')->nullable(); // ABA/Wing redirect link
+            $table->text('qr_payload')->nullable(); // KHQR scan payload
+            $table->timestamp('paid_at')->nullable();
             $table->json('raw_payload')->nullable(); // full webhook payload, for debugging/audits
             $table->timestamps();
 

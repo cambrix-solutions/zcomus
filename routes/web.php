@@ -3,6 +3,9 @@ use App\Http\Controllers\Frontend\CustomerDashboardController;
 use App\Http\Controllers\Frontend\SupportDashboardController;
 use App\Http\Controllers\Frontend\VendorDashboardController;
 use Illuminate\Support\Facades\Route;
+Route::get('/aba-test', function () {
+    return view('aba-test');
+});
 /*
 |--------------------------------------------------------------------------
 | Public Routes
@@ -63,3 +66,5 @@ require __DIR__ . '/account.php';
 require __DIR__ . '/catalog.php';
 require __DIR__ . '/admin_users.php';
 require __DIR__ . '/cart.php';
+require __DIR__ . '/checkout.php';
+require __DIR__ . '/orders.php';
