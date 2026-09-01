@@ -104,6 +104,11 @@ class User extends Authenticatable
         return $this->hasMany(FollowedShop::class);
     }
 
+    public function recentlyViews(): HasMany
+    {
+        return $this->hasMany(RecentlyView::class);
+    }
+
     /**
      * A user can hold multiple roles (customer, vendor, support), set
      * by an admin — no more single `users.role` enum.
